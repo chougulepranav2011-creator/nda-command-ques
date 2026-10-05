@@ -1,0 +1,2199 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NDA COMMAND QUEST</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    background:#07110d;
+    color:#f2f5e9;
+    min-height:100vh;
+    overflow-x:hidden;
+}
+
+body:before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+    radial-gradient(circle at 20% 20%,rgba(91,150,90,.15),transparent 25%),
+    radial-gradient(circle at 80% 80%,rgba(210,160,40,.10),transparent 25%);
+    pointer-events:none;
+    z-index:-2;
+}
+
+.stars{
+    position:fixed;
+    inset:0;
+    background-image:
+    radial-gradient(#fff 1px,transparent 1px),
+    radial-gradient(#fff 1px,transparent 1px);
+    background-size:80px 80px,130px 130px;
+    background-position:0 0,40px 60px;
+    opacity:.08;
+    animation:stars 25s linear infinite;
+    z-index:-1;
+}
+
+@keyframes stars{
+    from{transform:translateY(0)}
+    to{transform:translateY(80px)}
+}
+
+header{
+    padding:18px 5%;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    background:rgba(3,10,7,.92);
+    position:sticky;
+    top:0;
+    z-index:20;
+}
+
+.nav{
+    max-width:1200px;
+    margin:auto;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo{
+    font-weight:900;
+    letter-spacing:2px;
+    font-size:20px;
+}
+
+.logo span{
+    color:#d9ad32;
+}
+
+.status{
+    color:#76e676;
+    font-size:12px;
+    border:1px solid #315c3a;
+    padding:7px 12px;
+    border-radius:20px;
+}
+
+.container{
+    width:92%;
+    max-width:1200px;
+    margin:35px auto;
+}
+
+.hero{
+    text-align:center;
+    padding:45px 20px 30px;
+    animation:fadeUp .8s ease;
+}
+
+.hero h1{
+    font-size:clamp(35px,7vw,70px);
+    letter-spacing:4px;
+    color:#e1bd52;
+    text-shadow:0 0 25px rgba(225,189,82,.2);
+}
+
+.hero h2{
+    margin-top:10px;
+    color:#b8c5b7;
+    font-size:16px;
+    letter-spacing:3px;
+}
+
+.quote{
+    margin:25px auto;
+    max-width:700px;
+    padding:18px;
+    border-left:3px solid #d9ad32;
+    background:rgba(255,255,255,.04);
+    font-style:italic;
+    color:#dce5d7;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    margin:25px 0;
+}
+
+.stat{
+    background:rgba(255,255,255,.045);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:15px;
+    padding:20px;
+    text-align:center;
+    transition:.25s;
+}
+
+.stat:hover{
+    transform:translateY(-5px);
+    border-color:#d9ad32;
+}
+
+.stat .number{
+    font-size:28px;
+    font-weight:bold;
+    color:#e1bd52;
+}
+
+.stat small{
+    color:#9eaa9d;
+}
+
+.xp-box{
+    background:rgba(255,255,255,.04);
+    padding:18px;
+    border-radius:15px;
+    margin-bottom:30px;
+}
+
+.xp-top{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:10px;
+}
+
+.xp-bar{
+    height:12px;
+    background:#17231b;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.xp-fill{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,#879b3b,#e0b83c);
+    transition:width .7s ease;
+}
+
+.section-title{
+    margin:35px 0 15px;
+    font-size:25px;
+}
+
+.levels{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:18px;
+}
+
+.level{
+    position:relative;
+    background:linear-gradient(145deg,#101b14,#0b130e);
+    border:1px solid rgba(255,255,255,.09);
+    border-radius:18px;
+    padding:23px;
+    cursor:pointer;
+    overflow:hidden;
+    transition:.3s;
+}
+
+.level:hover{
+    transform:translateY(-6px);
+    border-color:#d9ad32;
+    box-shadow:0 15px 35px rgba(0,0,0,.35);
+}
+
+.level.locked{
+    opacity:.45;
+    cursor:not-allowed;
+}
+
+.level-number{
+    font-size:12px;
+    color:#d9ad32;
+    letter-spacing:2px;
+}
+
+.level h3{
+    margin:7px 0;
+}
+
+.level p{
+    color:#9eaa9d;
+    font-size:14px;
+}
+
+.level-footer{
+    margin-top:18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.badge{
+    padding:5px 9px;
+    border-radius:12px;
+    background:#1d2c20;
+    color:#bcd49e;
+    font-size:11px;
+}
+
+button{
+    border:none;
+    cursor:pointer;
+    color:#08100a;
+    background:#d9ad32;
+    font-weight:bold;
+    padding:12px 20px;
+    border-radius:10px;
+    transition:.2s;
+}
+
+button:hover{
+    transform:translateY(-2px) scale(1.02);
+    background:#f0cc59;
+}
+
+button.secondary{
+    background:#27362a;
+    color:#dce5d7;
+}
+
+button.whatsapp{
+    background:#25D366;
+    color:white;
+}
+
+.share-area{
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    flex-wrap:wrap;
+    margin:25px 0;
+}
+
+#quizScreen{
+    display:none;
+    animation:fadeUp .5s ease;
+}
+
+.quiz-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+}
+
+.quiz-card{
+    max-width:850px;
+    margin:auto;
+    background:linear-gradient(145deg,#101b14,#0b130e);
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:22px;
+    padding:30px;
+    box-shadow:0 20px 60px rgba(0,0,0,.35);
+}
+
+.progress{
+    height:7px;
+    background:#17231b;
+    border-radius:20px;
+    margin:12px 0 25px;
+    overflow:hidden;
+}
+
+.progress-fill{
+    height:100%;
+    width:0%;
+    background:#d9ad32;
+    transition:.4s;
+}
+
+.category{
+    color:#d9ad32;
+    font-size:12px;
+    letter-spacing:2px;
+    font-weight:bold;
+}
+
+.question{
+    font-size:25px;
+    line-height:1.4;
+    margin:15px 0 25px;
+}
+
+.options{
+    display:grid;
+    gap:12px;
+}
+
+.option{
+    padding:17px;
+    border:1px solid #29392d;
+    background:#111b14;
+    border-radius:12px;
+    text-align:left;
+    color:#edf2e8;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.option:hover{
+    border-color:#d9ad32;
+    transform:translateX(5px);
+}
+
+.option.correct{
+    background:#153b22;
+    border-color:#4bd275;
+}
+
+.option.wrong{
+    background:#3d1919;
+    border-color:#e06464;
+}
+
+.explanation{
+    display:none;
+    margin-top:20px;
+    padding:15px;
+    background:#172219;
+    border-left:3px solid #d9ad32;
+    color:#c8d2c5;
+    line-height:1.5;
+}
+
+.quiz-bottom{
+    margin-top:22px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+}
+
+#nextBtn{
+    display:none;
+}
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.8);
+    z-index:100;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.modal-box{
+    max-width:500px;
+    width:100%;
+    text-align:center;
+    background:#0d1811;
+    border:1px solid #d9ad32;
+    border-radius:22px;
+    padding:35px;
+    animation:modalIn .4s ease;
+}
+
+.modal-icon{
+    font-size:65px;
+}
+
+.modal h2{
+    color:#e1bd52;
+    margin:15px 0;
+}
+
+.modal p{
+    color:#bac7b9;
+    line-height:1.6;
+    margin-bottom:20px;
+}
+
+.rewards{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    justify-content:center;
+}
+
+.reward{
+    background:#172219;
+    border:1px solid #344c38;
+    border-radius:12px;
+    padding:10px 13px;
+    font-size:13px;
+}
+
+.confetti{
+    position:fixed;
+    width:8px;
+    height:15px;
+    top:-20px;
+    z-index:200;
+    animation:fall 2.5s linear forwards;
+}
+
+@keyframes fall{
+    to{
+        transform:translateY(110vh) rotate(720deg);
+        opacity:0;
+    }
+}
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@keyframes modalIn{
+    from{
+        transform:scale(.8);
+        opacity:0;
+    }
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
+}
+
+@media(max-width:700px){
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .levels{
+        grid-template-columns:1fr;
+    }
+
+    .quiz-card{
+        padding:20px;
+    }
+
+    .question{
+        font-size:20px;
+    }
+
+    .quiz-bottom{
+        flex-direction:column;
+        align-items:stretch;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="stars"></div>
+
+<header>
+    <div class="nav">
+        <div class="logo">
+            NDA <span>COMMAND QUEST</span>
+        </div>
+
+        <div class="status">
+            ● SYSTEM ONLINE
+        </div>
+    </div>
+</header>
+
+
+<main class="container">
+
+<section id="homeScreen">
+
+    <div class="hero">
+
+        <h1>COMMAND QUEST</h1>
+
+        <h2>
+            TRAIN YOUR MIND • BUILD YOUR DISCIPLINE • AIM FOR NDA
+        </h2>
+
+        <div class="quote" id="quote">
+            "Discipline today creates confidence tomorrow."
+        </div>
+
+    </div>
+
+
+    <div class="stats">
+
+        <div class="stat">
+            <div class="number" id="xp">0</div>
+            <small>XP</small>
+        </div>
+
+        <div class="stat">
+            <div class="number" id="coins">0</div>
+            <small>CADET COINS</small>
+        </div>
+
+        <div class="stat">
+            <div class="number" id="rank">CADET</div>
+            <small>RANK</small>
+        </div>
+
+        <div class="stat">
+            <div class="number" id="completed">0</div>
+            <small>LEVELS CLEARED</small>
+        </div>
+
+    </div>
+
+
+    <div class="xp-box">
+
+        <div class="xp-top">
+            <strong>CAREER PROGRESS</strong>
+            <span id="xpText">0 / 100 XP</span>
+        </div>
+
+        <div class="xp-bar">
+            <div class="xp-fill" id="xpFill"></div>
+        </div>
+
+    </div>
+
+
+    <div class="share-area">
+
+        <button class="whatsapp" onclick="shareWhatsApp()">
+            📲 SHARE ON WHATSAPP
+        </button>
+
+        <button class="secondary" onclick="copyLink()">
+            🔗 COPY LINK
+        </button>
+
+    </div>
+
+
+    <h2 class="section-title">
+        🎖️ TRAINING LEVELS
+    </h2>
+
+    <div class="levels" id="levels"></div>
+
+
+    <div style="text-align:center;margin:35px 0;">
+
+        <button class="secondary" onclick="resetProgress()">
+            RESET TRAINING DATA
+        </button>
+
+    </div>
+
+</section>
+
+
+
+<section id="quizScreen">
+
+    <div class="quiz-head">
+
+        <button class="secondary" onclick="goHome()">
+            ← COMMAND HQ
+        </button>
+
+        <strong id="quizScore">
+            Score: 0
+        </strong>
+
+    </div>
+
+
+    <div class="quiz-card">
+
+        <div class="category" id="category">
+            MATHEMATICS
+        </div>
+
+        <div class="progress">
+
+            <div
+                class="progress-fill"
+                id="questionProgress">
+            </div>
+
+        </div>
+
+
+        <div id="questionCounter"></div>
+
+
+        <div class="question" id="question"></div>
+
+
+        <div class="options" id="options"></div>
+
+
+        <div class="explanation" id="explanation"></div>
+
+
+        <div class="quiz-bottom">
+
+            <span id="motivational"></span>
+
+            <button id="nextBtn" onclick="nextQuestion()">
+                NEXT →
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+
+<div class="modal" id="rewardModal">
+
+    <div class="modal-box">
+
+        <div class="modal-icon">
+            🏆
+        </div>
+
+        <h2 id="rewardTitle">
+            LEVEL CLEARED!
+        </h2>
+
+        <p id="rewardText"></p>
+
+        <div class="rewards" id="rewardList"></div>
+
+        <br>
+
+        <button onclick="closeReward()">
+            CONTINUE MISSION
+        </button>
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+/* =========================================================
+   PLAYER DATA
+========================================================= */
+
+let player =
+JSON.parse(localStorage.getItem("ndaCommandQuest"))
+||
+{
+    xp:0,
+    coins:0,
+    completed:[],
+    badges:[]
+};
+
+
+/* =========================================================
+   MOTIVATIONAL LINES
+========================================================= */
+
+const motivationalLines = [
+
+    "Stay calm. Think clearly. Execute correctly.",
+
+    "One correct answer is one step forward.",
+
+    "Consistency beats last-minute pressure.",
+
+    "A disciplined mind is a powerful mind.",
+
+    "Learn from the mistake. Attack the next question.",
+
+    "Your preparation is your confidence.",
+
+    "Small progress every day becomes a big result.",
+
+    "Officer mindset starts with disciplined habits.",
+
+    "Don't chase perfection. Chase improvement.",
+
+    "Mission continues. Stay focused, Cadet."
+
+];
+
+
+/* =========================================================
+   10 REAL LEVELS
+========================================================= */
+
+const levels = [
+
+{
+name:"MATHEMATICS FOUNDATION",
+desc:"Percentages, ratios, averages, equations and number basics.",
+questions:[
+
+{
+q:"What is 25% of 240?",
+o:["40","50","60","80"],
+a:2,
+e:"25% of 240 = 240 × 25/100 = 60.",
+c:"MATHEMATICS"
+},
+
+{
+q:"What is the LCM of 12 and 18?",
+o:["24","30","36","48"],
+a:2,
+e:"The LCM of 12 and 18 is 36.",
+c:"MATHEMATICS"
+},
+
+{
+q:"Solve: 2x + 5 = 17",
+o:["4","5","6","7"],
+a:2,
+e:"2x = 12, therefore x = 6.",
+c:"MATHEMATICS"
+},
+
+{
+q:"Find the average of 12, 18, 20 and 10.",
+o:["12","14","15","16"],
+a:2,
+e:"Total = 60. Average = 60/4 = 15.",
+c:"MATHEMATICS"
+},
+
+{
+q:"Two numbers are in ratio 3:5 and their total is 64. Find the smaller number.",
+o:["18","21","24","30"],
+a:2,
+e:"Total parts = 8. One part = 8. Smaller number = 3×8 = 24.",
+c:"MATHEMATICS"
+}
+
+]
+},
+
+
+{
+name:"ARITHMETIC & ALGEBRA",
+desc:"Profit, interest, speed, work and algebra.",
+questions:[
+
+{
+q:"Find the simple interest on ₹5000 at 8% per annum for 2 years.",
+o:["₹600","₹700","₹800","₹900"],
+a:2,
+e:"SI = P×R×T/100 = ₹800.",
+c:"MATHEMATICS"
+},
+
+{
+q:"A vehicle travels at 60 km/h for 2.5 hours. What distance does it cover?",
+o:["120 km","140 km","150 km","180 km"],
+a:2,
+e:"Distance = Speed × Time = 60×2.5 = 150 km.",
+c:"MATHEMATICS"
+},
+
+{
+q:"An article costing ₹500 is sold at a profit of 20%. Find the selling price.",
+o:["₹550","₹580","₹600","₹620"],
+a:2,
+e:"20% of ₹500 = ₹100. Selling price = ₹600.",
+c:"MATHEMATICS"
+},
+
+{
+q:"A completes a work in 10 days and B in 15 days. Together they finish it in:",
+o:["5 days","6 days","7 days","8 days"],
+a:1,
+e:"Combined rate = 1/10 + 1/15 = 1/6. Time = 6 days.",
+c:"MATHEMATICS"
+},
+
+{
+q:"What is the amount after 2 years on ₹1000 at 10% compound interest?",
+o:["₹1200","₹1210","₹1220","₹1250"],
+a:1,
+e:"1000 × 1.1 × 1.1 = ₹1210.",
+c:"MATHEMATICS"
+}
+
+]
+},
+
+
+{
+name:"GEOMETRY & TRIGONOMETRY",
+desc:"Triangles, circles, Pythagoras and basic trigonometry.",
+questions:[
+
+{
+q:"Two angles of a triangle are 50° and 60°. Find the third angle.",
+o:["60°","70°","80°","90°"],
+a:1,
+e:"Third angle = 180° − 50° − 60° = 70°.",
+c:"MATHEMATICS"
+},
+
+{
+q:"Using π = 22/7, find the area of a circle of radius 7 cm.",
+o:["144 cm²","154 cm²","164 cm²","174 cm²"],
+a:1,
+e:"Area = πr² = 22/7 × 49 = 154 cm².",
+c:"MATHEMATICS"
+},
+
+{
+q:"A right triangle has perpendicular sides 6 cm and 8 cm. Find the hypotenuse.",
+o:["9 cm","10 cm","12 cm","14 cm"],
+a:1,
+e:"√(6² + 8²) = √100 = 10 cm.",
+c:"MATHEMATICS"
+},
+
+{
+q:"What is sin 30°?",
+o:["0","1/2","√3/2","1"],
+a:1,
+e:"The standard value of sin 30° is 1/2.",
+c:"MATHEMATICS"
+},
+
+{
+q:"The slope of the line joining (1,2) and (3,6) is:",
+o:["1","2","3","4"],
+a:1,
+e:"Slope = (6−2)/(3−1) = 2.",
+c:"MATHEMATICS"
+}
+
+]
+},
+
+
+{
+name:"ENGLISH COMMAND",
+desc:"Grammar, vocabulary, idioms and sentence correction.",
+questions:[
+
+{
+q:"Choose the correct sentence.",
+o:[
+"He go to school every day.",
+"He goes to school every day.",
+"He going to school every day.",
+"He gone to school every day."
+],
+a:1,
+e:"With 'He', the simple present form is 'goes'.",
+c:"ENGLISH"
+},
+
+{
+q:"Choose the synonym of 'Rapid'.",
+o:["Slow","Quick","Weak","Late"],
+a:1,
+e:"Rapid means quick or fast.",
+c:"ENGLISH"
+},
+
+{
+q:"Choose the antonym of 'Ancient'.",
+o:["Old","Historic","Modern","Past"],
+a:2,
+e:"Modern is the opposite of ancient.",
+c:"ENGLISH"
+},
+
+{
+q:"What does 'once in a blue moon' mean?",
+o:[
+"Every day",
+"Very rarely",
+"At night",
+"Very quickly"
+],
+a:1,
+e:"The idiom means something that happens very rarely.",
+c:"ENGLISH"
+},
+
+{
+q:"Choose the correct word: 'Neither of the boys ___ ready.'",
+o:["are","were","is","have"],
+a:2,
+e:"'Neither' is singular in this construction, so 'is' is correct.",
+c:"ENGLISH"
+}
+
+]
+},
+
+
+{
+name:"PHYSICS MISSION",
+desc:"Force, motion, work, density and electricity.",
+questions:[
+
+{
+q:"What is the SI unit of force?",
+o:["Joule","Newton","Watt","Pascal"],
+a:1,
+e:"The SI unit of force is Newton (N).",
+c:"PHYSICS"
+},
+
+{
+q:"Acceleration is the rate of change of:",
+o:["Distance","Mass","Velocity","Density"],
+a:2,
+e:"Acceleration is change in velocity per unit time.",
+c:"PHYSICS"
+},
+
+{
+q:"If force is perpendicular to displacement, work done is:",
+o:["Maximum","Minimum","Zero","Infinite"],
+a:2,
+e:"W = Fs cosθ. At 90°, cos90° = 0.",
+c:"PHYSICS"
+},
+
+{
+q:"Density is defined as:",
+o:[
+"Volume/Mass",
+"Mass/Volume",
+"Mass×Volume",
+"Mass+Volume"
+],
+a:1,
+e:"Density = Mass ÷ Volume.",
+c:"PHYSICS"
+},
+
+{
+q:"The SI unit of electric current is:",
+o:["Volt","Ohm","Ampere","Coulomb"],
+a:2,
+e:"Electric current is measured in Ampere.",
+c:"PHYSICS"
+}
+
+]
+},
+
+
+{
+name:"SCIENCE COMMAND",
+desc:"Chemistry and Biology fundamentals.",
+questions:[
+
+{
+q:"A solution with pH 7 is generally:",
+o:["Acidic","Basic","Neutral","Salty"],
+a:2,
+e:"At school level, pH 7 represents a neutral solution.",
+c:"CHEMISTRY"
+},
+
+{
+q:"What is the chemical formula of water?",
+o:["CO₂","H₂O","O₂","H₂"],
+a:1,
+e:"Water contains two hydrogen atoms and one oxygen atom.",
+c:"CHEMISTRY"
+},
+
+{
+q:"Which gas is released during photosynthesis?",
+o:["Nitrogen","Carbon dioxide","Oxygen","Hydrogen"],
+a:2,
+e:"Plants release oxygen during photosynthesis.",
+c:"BIOLOGY"
+},
+
+{
+q:"Which blood cells mainly transport oxygen?",
+o:[
+"White blood cells",
+"Red blood cells",
+"Platelets",
+"Plasma cells"
+],
+a:1,
+e:"Red blood cells contain haemoglobin, which carries oxygen.",
+c:"BIOLOGY"
+},
+
+{
+q:"What is the largest organ of the human body?",
+o:["Heart","Liver","Skin","Lung"],
+a:2,
+e:"The skin is the largest organ of the human body.",
+c:"BIOLOGY"
+}
+
+]
+},
+
+
+{
+name:"HISTORY & GEOGRAPHY",
+desc:"Indian history, geography and national facts.",
+questions:[
+
+{
+q:"The Constitution of India was adopted on:",
+o:[
+"15 August 1947",
+"26 January 1950",
+"26 November 1949",
+"2 October 1950"
+],
+a:2,
+e:"The Constitution was adopted on 26 November 1949.",
+c:"HISTORY"
+},
+
+{
+q:"Which important latitude passes through India?",
+o:[
+"Equator",
+"Tropic of Cancer",
+"Tropic of Capricorn",
+"Arctic Circle"
+],
+a:1,
+e:"The Tropic of Cancer passes through India.",
+c:"GEOGRAPHY"
+},
+
+{
+q:"The Sundarbans are famous for their:",
+o:[
+"Coral reefs",
+"Mangrove forests",
+"Desert dunes",
+"Tea gardens"
+],
+a:1,
+e:"The Sundarbans are famous for their mangrove ecosystem.",
+c:"GEOGRAPHY"
+},
+
+{
+q:"The capital of Sikkim is:",
+o:["Shillong","Gangtok","Imphal","Aizawl"],
+a:1,
+e:"Gangtok is the capital of Sikkim.",
+c:"GEOGRAPHY"
+},
+
+{
+q:"India is located mainly in which hemispheres?",
+o:[
+"Southern and Western",
+"Northern and Eastern",
+"Southern and Eastern",
+"Northern and Western"
+],
+a:1,
+e:"India lies north of the Equator and east of the Prime Meridian.",
+c:"GEOGRAPHY"
+}
+
+]
+},
+
+
+{
+name:"POLITY & ECONOMY",
+desc:"Constitution, governance and basic economic awareness.",
+questions:[
+
+{
+q:"Fundamental Rights are contained in which Part of the Constitution?",
+o:["Part I","Part II","Part III","Part IV"],
+a:2,
+e:"Fundamental Rights are contained in Part III.",
+c:"POLITY"
+},
+
+{
+q:"The normal term of the Lok Sabha is:",
+o:["3 years","4 years","5 years","6 years"],
+a:2,
+e:"The normal term is five years unless dissolved earlier.",
+c:"POLITY"
+},
+
+{
+q:"Which institution is India's central bank?",
+o:["SBI","RBI","SEBI","NITI Aayog"],
+a:1,
+e:"Reserve Bank of India is India's central bank.",
+c:"ECONOMY"
+},
+
+{
+q:"GST is mainly a:",
+o:[
+"Direct tax",
+"Indirect tax",
+"Property document",
+"Bank deposit"
+],
+a:1,
+e:"GST is an indirect tax.",
+c:"ECONOMY"
+},
+
+{
+q:"Panchayati Raj generally has how many levels?",
+o:["Two","Three","Four","Five"],
+a:1,
+e:"The commonly described structure has three levels.",
+c:"POLITY"
+}
+
+]
+},
+
+
+{
+name:"MIXED GAT ARENA",
+desc:"Mixed NDA-style questions across Maths, English, Science and GK.",
+questions:[
+
+{
+q:"What is 15 × 16?",
+o:["220","230","240","250"],
+a:2,
+e:"15 × 16 = 240.",
+c:"MATHEMATICS"
+},
+
+{
+q:"Which two substances are raw materials for photosynthesis?",
+o:[
+"Oxygen and glucose",
+"Carbon dioxide and water",
+"Nitrogen and oxygen",
+"Hydrogen and oxygen"
+],
+a:1,
+e:"Plants use carbon dioxide and water to make food.",
+c:"BIOLOGY"
+},
+
+{
+q:"Choose the synonym of 'Rapid'.",
+o:["Weak","Quick","Dull","Silent"],
+a:1,
+e:"Quick is a synonym of rapid.",
+c:"ENGLISH"
+},
+
+{
+q:"The Earth rotates on its axis from:",
+o:[
+"East to West",
+"West to East",
+"North to South",
+"South to North"
+],
+a:1,
+e:"The Earth rotates from west to east.",
+c:"GEOGRAPHY"
+},
+
+{
+q:"0.75 expressed as a fraction is:",
+o:["1/2","2/3","3/4","4/5"],
+a:2,
+e:"0.75 = 75/100 = 3/4.",
+c:"MATHEMATICS"
+}
+
+]
+},
+
+
+{
+name:"GRAND COMMAND",
+desc:"Final mixed challenge.",
+questions:[
+
+{
+q:"If x + 1/x = 5, find x² + 1/x².",
+o:["21","23","25","27"],
+a:1,
+e:"Squaring: x² + 2 + 1/x² = 25. Therefore answer = 23.",
+c:"MATHEMATICS"
+},
+
+{
+q:"Choose the grammatically correct sentence.",
+o:[
+"Neither of the boys are ready.",
+"Neither of the boys is ready.",
+"Neither boys is ready.",
+"Neither of boys are ready."
+],
+a:1,
+e:"'Neither' is singular in this construction.",
+c:"ENGLISH"
+},
+
+{
+q:"Fundamental Duties were added by which Amendment?",
+o:[
+"24th Amendment",
+"42nd Amendment",
+"44th Amendment",
+"73rd Amendment"
+],
+a:1,
+e:"The 42nd Constitutional Amendment added Fundamental Duties.",
+c:"POLITY"
+},
+
+{
+q:"The ozone layer is mainly found in which atmospheric layer?",
+o:[
+"Troposphere",
+"Stratosphere",
+"Mesosphere",
+"Thermosphere"
+],
+a:1,
+e:"The ozone layer is concentrated mainly in the stratosphere.",
+c:"SCIENCE"
+},
+
+{
+q:"A number increases from 200 to 250. What is the percentage increase?",
+o:["20%","25%","30%","50%"],
+a:1,
+e:"Increase = 50. 50/200 × 100 = 25%.",
+c:"MATHEMATICS"
+}
+
+]
+}
+
+];
+
+
+/* =========================================================
+   QUIZ VARIABLES
+========================================================= */
+
+let currentLevel=0;
+let currentQuestion=0;
+let score=0;
+let levelXP=0;
+let levelCoins=0;
+let answered=false;
+
+
+/* =========================================================
+   SAVE
+========================================================= */
+
+function saveData(){
+
+    localStorage.setItem(
+        "ndaCommandQuest",
+        JSON.stringify(player)
+    );
+
+}
+
+
+/* =========================================================
+   RANK
+========================================================= */
+
+function getRank(){
+
+    if(player.xp>=1500)
+        return "NDA CHAMPION";
+
+    if(player.xp>=1000)
+        return "OFFICER CANDIDATE";
+
+    if(player.xp>=600)
+        return "SENIOR CADET";
+
+    if(player.xp>=300)
+        return "JUNIOR CADET";
+
+    return "CADET";
+}
+
+
+/* =========================================================
+   BADGES
+========================================================= */
+
+function updateBadges(){
+
+    const rules=[
+
+        [100,"🎯 FIRST MISSION"],
+
+        [300,"⭐ DISCIPLINED CADET"],
+
+        [600,"🔥 HIGH PERFORMER"],
+
+        [1000,"🏅 OFFICER CANDIDATE"],
+
+        [1500,"🏆 NDA CHAMPION"]
+
+    ];
+
+
+    rules.forEach(rule=>{
+
+        if(
+            player.xp>=rule[0] &&
+            !player.badges.includes(rule[1])
+        ){
+
+            player.badges.push(rule[1]);
+
+            setTimeout(
+                ()=>showToast(
+                    "NEW BADGE: "+rule[1]
+                ),
+                300
+            );
+
+        }
+
+    });
+
+}
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+function updateDashboard(){
+
+    document.getElementById("xp").innerText=
+        player.xp;
+
+    document.getElementById("coins").innerText=
+        player.coins;
+
+    document.getElementById("rank").innerText=
+        getRank();
+
+    document.getElementById("completed").innerText=
+        player.completed.length;
+
+
+    let nextXP=
+        Math.ceil((player.xp+1)/100)*100;
+
+    let previousXP=
+        nextXP-100;
+
+    if(player.xp<100){
+
+        previousXP=0;
+        nextXP=100;
+
+    }
+
+
+    let progress=
+        ((player.xp-previousXP)/
+        (nextXP-previousXP))*100;
+
+
+    document.getElementById("xpText").innerText=
+        player.xp+" / "+nextXP+" XP";
+
+    document.getElementById("xpFill").style.width=
+        Math.min(progress,100)+"%";
+
+
+    updateBadges();
+
+    saveData();
+
+}
+
+
+/* =========================================================
+   LEVEL UNLOCK
+========================================================= */
+
+function isUnlocked(index){
+
+    if(index===0)
+        return true;
+
+    return player.completed.includes(index-1);
+
+}
+
+
+/* =========================================================
+   RENDER LEVELS
+========================================================= */
+
+function renderLevels(){
+
+    const box=
+        document.getElementById("levels");
+
+    box.innerHTML="";
+
+
+    levels.forEach((level,index)=>{
+
+        const unlocked=
+            isUnlocked(index);
+
+        const completed=
+            player.completed.includes(index);
+
+
+        const div=
+            document.createElement("div");
+
+        div.className=
+            "level "+(!unlocked?"locked":"");
+
+
+        div.innerHTML=`
+
+            <div class="level-number">
+                LEVEL ${index+1}
+            </div>
+
+            <h3>${level.name}</h3>
+
+            <p>${level.desc}</p>
+
+            <div class="level-footer">
+
+                <span class="badge">
+                    ${completed
+                    ?"✓ CLEARED"
+                    :"5 QUESTIONS"}
+                </span>
+
+                <span>
+                    ${unlocked
+                    ?"▶ START"
+                    :"🔒 LOCKED"}
+                </span>
+
+            </div>
+
+        `;
+
+
+        if(unlocked){
+
+            div.onclick=
+                ()=>startLevel(index);
+
+        }
+
+
+        box.appendChild(div);
+
+    });
+
+}
+
+
+/* =========================================================
+   START LEVEL
+========================================================= */
+
+function startLevel(index){
+
+    currentLevel=index;
+    currentQuestion=0;
+    score=0;
+    levelXP=0;
+    levelCoins=0;
+
+
+    document.getElementById(
+        "homeScreen"
+    ).style.display="none";
+
+
+    document.getElementById(
+        "quizScreen"
+    ).style.display="block";
+
+
+    window.scrollTo(0,0);
+
+    showQuestion();
+
+}
+
+
+/* =========================================================
+   SHOW QUESTION
+========================================================= */
+
+function showQuestion(){
+
+    answered=false;
+
+
+    const q=
+        levels[currentLevel]
+        .questions[currentQuestion];
+
+
+    document.getElementById("category")
+        .innerText=q.c;
+
+
+    document.getElementById("questionCounter")
+        .innerText=
+        "Question "+
+        (currentQuestion+1)+
+        " / "+
+        levels[currentLevel]
+        .questions.length;
+
+
+    document.getElementById("question")
+        .innerText=q.q;
+
+
+    document.getElementById("quizScore")
+        .innerText="Score: "+score;
+
+
+    document.getElementById(
+        "questionProgress"
+    ).style.width=
+        ((currentQuestion)/
+        levels[currentLevel]
+        .questions.length)*100+"%";
+
+
+    document.getElementById(
+        "explanation"
+    ).style.display="none";
+
+
+    document.getElementById(
+        "nextBtn"
+    ).style.display="none";
+
+
+    document.getElementById(
+        "motivational"
+    ).innerText="";
+
+
+    const options=
+        document.getElementById("options");
+
+    options.innerHTML="";
+
+
+    q.o.forEach((option,index)=>{
+
+        const btn=
+            document.createElement("div");
+
+        btn.className="option";
+
+        btn.innerText=
+            String.fromCharCode(65+index)+
+            ". "+option;
+
+
+        btn.onclick=
+            ()=>selectAnswer(index,btn);
+
+
+        options.appendChild(btn);
+
+    });
+
+}
+
+
+/* =========================================================
+   ANSWER
+========================================================= */
+
+function selectAnswer(index,button){
+
+    if(answered)
+        return;
+
+
+    answered=true;
+
+
+    const q=
+        levels[currentLevel]
+        .questions[currentQuestion];
+
+
+    const all=
+        document.querySelectorAll(".option");
+
+
+    all.forEach((el,i)=>{
+
+        if(i===q.a)
+            el.classList.add("correct");
+
+    });
+
+
+    if(index===q.a){
+
+        score++;
+
+        levelXP+=20;
+
+        levelCoins+=10;
+
+        button.classList.add("correct");
+
+
+        document.getElementById(
+            "motivational"
+        ).innerText=
+            "✓ "+randomMotivation();
+
+    }
+
+    else{
+
+        button.classList.add("wrong");
+
+
+        document.getElementById(
+            "motivational"
+        ).innerText=
+            "Keep learning. "+
+            randomMotivation();
+
+    }
+
+
+    document.getElementById(
+        "explanation"
+    ).innerHTML=
+        "<strong>WHY?</strong> "+q.e;
+
+
+    document.getElementById(
+        "explanation"
+    ).style.display="block";
+
+
+    document.getElementById(
+        "nextBtn"
+    ).style.display="block";
+
+}
+
+
+/* =========================================================
+   NEXT QUESTION
+========================================================= */
+
+function nextQuestion(){
+
+    currentQuestion++;
+
+
+    if(
+        currentQuestion >=
+        levels[currentLevel]
+        .questions.length
+    ){
+
+        finishLevel();
+
+    }
+
+    else{
+
+        showQuestion();
+
+    }
+
+}
+
+
+/* =========================================================
+   FINISH LEVEL
+========================================================= */
+
+function finishLevel(){
+
+    const total=
+        levels[currentLevel]
+        .questions.length;
+
+
+    const percentage=
+        Math.round((score/total)*100);
+
+
+    const passed=
+        percentage>=60;
+
+
+    if(passed){
+
+        if(
+            !player.completed
+            .includes(currentLevel)
+        ){
+
+            player.completed.push(
+                currentLevel
+            );
+
+            player.xp+=100;
+            player.coins+=50;
+
+        }
+
+
+        player.xp+=levelXP;
+        player.coins+=levelCoins;
+
+
+        if(score===total){
+
+            player.xp+=50;
+            player.coins+=25;
+
+        }
+
+
+        saveData();
+
+        updateDashboard();
+        renderLevels();
+
+
+        showReward(
+            percentage,
+            score,
+            total,
+            true
+        );
+
+    }
+
+    else{
+
+        showReward(
+            percentage,
+            score,
+            total,
+            false
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   REWARD MODAL
+========================================================= */
+
+function showReward(
+    percentage,
+    score,
+    total,
+    passed
+){
+
+    const title=
+        document.getElementById(
+            "rewardTitle"
+        );
+
+
+    const text=
+        document.getElementById(
+            "rewardText"
+        );
+
+
+    const list=
+        document.getElementById(
+            "rewardList"
+        );
+
+
+    list.innerHTML="";
+
+
+    if(passed){
+
+        title.innerText=
+            "🏆 LEVEL CLEARED!";
+
+
+        text.innerText=
+            "Excellent work, Cadet. You scored "+
+            percentage+"% ("+
+            score+"/"+total+
+            "). The next mission is unlocked.";
+
+
+        list.innerHTML+=
+            `<div class="reward">
+                +100 XP
+            </div>`;
+
+
+        list.innerHTML+=
+            `<div class="reward">
+                +50 Cadet Coins
+            </div>`;
+
+
+        if(score===total){
+
+            list.innerHTML+=
+                `<div class="reward">
+                    🔥 PERFECT +50 XP
+                </div>`;
+
+        }
+
+
+        createConfetti();
+
+    }
+
+    else{
+
+        title.innerText=
+            "MISSION REPEAT";
+
+
+        text.innerText=
+            "You scored "+
+            percentage+
+            "%. You need at least 60% to clear this level. "+
+            "No penalty — learn and retry.";
+
+
+        list.innerHTML=
+            `<div class="reward">
+                📚 RETRY AVAILABLE
+            </div>`;
+
+    }
+
+
+    document.getElementById(
+        "rewardModal"
+    ).style.display="flex";
+
+}
+
+
+/* =========================================================
+   CLOSE REWARD
+========================================================= */
+
+function closeReward(){
+
+    document.getElementById(
+        "rewardModal"
+    ).style.display="none";
+
+
+    goHome();
+
+}
+
+
+/* =========================================================
+   HOME
+========================================================= */
+
+function goHome(){
+
+    document.getElementById(
+        "quizScreen"
+    ).style.display="none";
+
+
+    document.getElementById(
+        "homeScreen"
+    ).style.display="block";
+
+
+    updateDashboard();
+    renderLevels();
+
+
+    document.getElementById(
+        "quote"
+    ).innerText=
+        '"'+randomMotivation()+'"';
+
+
+    window.scrollTo(0,0);
+
+}
+
+
+/* =========================================================
+   RANDOM MOTIVATION
+========================================================= */
+
+function randomMotivation(){
+
+    return motivationalLines[
+        Math.floor(
+            Math.random()*
+            motivationalLines.length
+        )
+    ];
+
+}
+
+
+/* =========================================================
+   WHATSAPP SHARE
+========================================================= */
+
+function shareWhatsApp(){
+
+    const url=
+        window.location.href;
+
+
+    const message=
+`🇮🇳 NDA COMMAND QUEST 🇮🇳
+
+🎖️ Test your NDA preparation!
+
+📚 Maths
+📖 English
+🔬 Science
+🌍 GK
+🏆 XP & Rewards
+🎯 Unlock Levels
+🔥 Build your officer mindset
+
+Join the mission:
+${url}`;
+
+
+    const whatsappURL=
+        "https://wa.me/?text="+
+        encodeURIComponent(message);
+
+
+    window.open(
+        whatsappURL,
+        "_blank"
+    );
+
+}
+
+
+/* =========================================================
+   COPY LINK
+========================================================= */
+
+function copyLink(){
+
+    const url=
+        window.location.href;
+
+
+    if(navigator.clipboard){
+
+        navigator.clipboard.writeText(url)
+        .then(()=>{
+            showToast(
+                "🔗 LINK COPIED!"
+            );
+        });
+
+    }
+
+    else{
+
+        prompt(
+            "Copy this link:",
+            url
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   CONFETTI
+========================================================= */
+
+function createConfetti(){
+
+    for(let i=0;i<70;i++){
+
+        const c=
+            document.createElement("div");
+
+
+        c.className="confetti";
+
+
+        c.style.left=
+            Math.random()*100+"vw";
+
+
+        c.style.animationDelay=
+            Math.random()*1.5+"s";
+
+
+        c.style.background=
+            [
+                "#d9ad32",
+                "#7ac77a",
+                "#e7e7e7",
+                "#6ca4e8"
+            ][
+                Math.floor(
+                    Math.random()*4
+                )
+            ];
+
+
+        document.body.appendChild(c);
+
+
+        setTimeout(()=>{
+            c.remove();
+        },4000);
+
+    }
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(message){
+
+    const toast=
+        document.createElement("div");
+
+
+    toast.innerText=message;
+
+
+    toast.style.position="fixed";
+    toast.style.bottom="25px";
+    toast.style.left="50%";
+    toast.style.transform="translateX(-50%)";
+    toast.style.background="#d9ad32";
+    toast.style.color="#08100a";
+    toast.style.padding="13px 20px";
+    toast.style.borderRadius="12px";
+    toast.style.fontWeight="bold";
+    toast.style.zIndex="300";
+
+
+    document.body.appendChild(toast);
+
+
+    setTimeout(()=>{
+        toast.remove();
+    },3000);
+
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+function resetProgress(){
+
+    const yes=
+        confirm(
+            "Reset all XP, coins, badges and level progress?"
+        );
+
+
+    if(!yes)
+        return;
+
+
+    player={
+        xp:0,
+        coins:0,
+        completed:[],
+        badges:[]
+    };
+
+
+    saveData();
+
+    updateDashboard();
+    renderLevels();
+
+}
+
+
+/* =========================================================
+   START APP
+========================================================= */
+
+updateDashboard();
+renderLevels();
+
+</script>
+
+</body>
+</html>
